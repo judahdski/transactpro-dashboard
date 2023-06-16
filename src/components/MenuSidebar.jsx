@@ -20,7 +20,7 @@ const MenuSidebar = ({ handleChangeNavText }) => {
                                         background: isActive ? '#F2F2F2' : '#fff',
                                     };
                                 }}
-                                onClick={() => handleChangeNavText('Dashboard')}
+                                onClick={() => handleChangeNavText('Daftar Transaksi')}
                             >
                                 <svg
                                     aria-hidden="true"
@@ -32,7 +32,7 @@ const MenuSidebar = ({ handleChangeNavText }) => {
                                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                                 </svg>
-                                <span className="ml-3">Dashboard</span>
+                                <span className="ml-3">Daftar Transaksi</span>
                             </NavLink>
                         </li>
                         <li>

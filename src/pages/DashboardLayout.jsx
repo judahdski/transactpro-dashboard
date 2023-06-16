@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import MainSection from '../components/MainSection';
 
 const DashboardLayout = () => {
-    const [navText, setNavText] = useState('Dashboard');
+    const [navText, setNavText] = useState('Daftar Transaksi');
 
     const changeNavText = (text) => {
         setNavText(text);
