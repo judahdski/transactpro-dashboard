@@ -1,10 +1,10 @@
 import './App.css';
-import AuthPage from './pages/AuthPage';
+import DashboardLayout from './pages/DashboardLayout';
 
 function App() {
     return (
         <div className="h-full w-full">
-            <AuthPage />
+            <DashboardLayout />
         </div>
     );
 }

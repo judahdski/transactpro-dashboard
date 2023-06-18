@@ -76,10 +76,10 @@ const InputTransaction = () => {
 
     return (
         <div>
-            <div className="gap-6 mb-6 md:flex">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-6">
                 <div className="border px-3 pt-3 pb-4 rounded-lg shadow">
                     <h3 className="mb-3 font-semibold text-gray-800">Transaksi</h3>
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex-1">
                             <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 No.
@@ -108,7 +108,7 @@ const InputTransaction = () => {
                 </div>
                 <div className="border px-3 pt-3 pb-4 rounded-lg shadow">
                     <h3 className="mb-3 font-semibold text-gray-800">Customer</h3>
-                    <div className="flex gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
                         <div>
                             <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 Kode
