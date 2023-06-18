@@ -24,7 +24,7 @@ const Header = ({ navText }) => {
             </div>
             <div className="p-[3px] pl-[4px] border border-[#E7E8EC] hidden sm:flex items-center gap-1 rounded-full cursor-pointer">
                 <div className="w-7 aspect-square rounded-full flex justify-center items-center">
-                    <i class="fa-solid fa-bars"></i>
+                    <i className="fa-solid fa-bars"></i>
                 </div>
                 <div className="w-7 aspect-square rounded-full bg-slate-500"></div>
             </div>
