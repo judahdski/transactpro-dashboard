@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { products } from '../data';
+import ListProductPopup from "./ListProductPopup";
 
 const InputTransaction = () => {
     const [transactionCounter, setTransactionCounter] = useState('000000-0000');
     const [orders, setOrders] = useState([]);
+    const [orderDetails, setOrderDetails] = useState([]);
 
     const [grandTotal, setGrandTotal] = useState(0);
     const [subTotal, setSubTotal] = useState(0.0);
@@ -21,22 +24,28 @@ const InputTransaction = () => {
         setTransactionCounter(`${currYear}${currDate}-${strCounter}`);
     };
 
-    const addOrderItems = () => {
+    const addOrderItems = ({ barangId, qty, diskonPersen }) => {
+        const barangDetail = products.filter((product) => product.id === barangId)[0];
+
+        const diskonRupiah = barangDetail.harga * diskonPersen;
+        const hargaDiskon = barangDetail.harga - diskonRupiah;
+
         const order = {
-            kodeBarang: '1234',
-            namaBarang: 'Barang A',
-            quatity: 1,
-            hargaBandrol: 300000,
-            diskonPersen: 0.15,
-            diskonRupiah: 20000,
-            hargaDiskon: 300000,
-            total: 30000,
+            sales_id: '1',
+            kodeBarang: barangDetail.kode,
+            namaBarang: barangDetail.nama,
+            quatity: qty,
+            hargaBandrol: barangDetail.harga,
+            diskonPersen: diskonPersen,
+            diskonRupiah: diskonRupiah,
+            hargaDiskon: hargaDiskon,
+            total: hargaDiskon * qty,
         };
 
         const orderList = orders;
         orderList.push(order);
 
-        setOrders(orderList);
+        setOrderDetails(orderList);
         countSubTotal();
     };
 
@@ -44,7 +53,7 @@ const InputTransaction = () => {
         const orderList = orders;
         if (order_id > -1) orderList.splice(order_id, 1);
 
-        setOrders(orderList);
+        setOrderDetails(orderList);
         countSubTotal();
     };
 
@@ -65,7 +74,87 @@ const InputTransaction = () => {
     const handleSetDeliveryFee = ({ target }) => {
         if (isNaN(target.value)) return;
 
-        setTotalDiscount(parseInt(target.value));
+        setTotalDeliveryFee(parseInt(target.value));
+    };
+
+    const TransactionAdminDataInput = () => {
+        return (
+            <div className="border px-3 pt-3 pb-4 rounded-lg shadow">
+                <h3 className="mb-3 font-semibold text-gray-800">Transaksi</h3>
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                        <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            No.
+                        </label>
+                        <input
+                            type="text"
+                            id="transaction_number"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            value={transactionCounter}
+                            readOnly
+                            required
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <label htmlFor="last_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Tanggal
+                        </label>
+                        <input
+                            type="date"
+                            id="transaction_date"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const CustomerAdminDataInput = () => {
+        return (
+            <div className="border px-3 pt-3 pb-4 rounded-lg shadow">
+                <h3 className="mb-3 font-semibold text-gray-800">Customer</h3>
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div>
+                        <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Kode
+                        </label>
+                        <input
+                            type="text"
+                            id="customer_code"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="ex. 0001"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Nama
+                        </label>
+                        <input
+                            type="text"
+                            id="customer_name"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="ex. John Doe"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Telp
+                        </label>
+                        <input
+                            type="tel"
+                            id="customer_phone_num"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="ex. +6281234567"
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     useEffect(() => {
@@ -77,76 +166,8 @@ const InputTransaction = () => {
     return (
         <div>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-6">
-                <div className="border px-3 pt-3 pb-4 rounded-lg shadow">
-                    <h3 className="mb-3 font-semibold text-gray-800">Transaksi</h3>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <div className="flex-1">
-                            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                No.
-                            </label>
-                            <input
-                                type="text"
-                                id="transaction_number"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                value={transactionCounter}
-                                readOnly
-                                required
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <label htmlFor="last_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Tanggal
-                            </label>
-                            <input
-                                type="date"
-                                id="transaction_date"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="border px-3 pt-3 pb-4 rounded-lg shadow">
-                    <h3 className="mb-3 font-semibold text-gray-800">Customer</h3>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <div>
-                            <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Kode
-                            </label>
-                            <input
-                                type="text"
-                                id="customer_code"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="ex. 0001"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Nama
-                            </label>
-                            <input
-                                type="text"
-                                id="customer_name"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="ex. John Doe"
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                Telp
-                            </label>
-                            <input
-                                type="tel"
-                                id="customer_phone_num"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="ex. +6281234567"
-                                required
-                            />
-                        </div>
-                    </div>
-                </div>
+                <TransactionAdminDataInput />
+                <CustomerAdminDataInput />
             </div>
 
             <div className="mb-8 relative overflow-x-auto shadow-md rounded-lg">
@@ -154,9 +175,7 @@ const InputTransaction = () => {
                     <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="">
-                                <button className="px-6 py-3 w-full bg-green-400 hover:bg-green-500 text-white" onClick={addOrderItems}>
-                                    Tambah
-                                </button>
+                                <ListProductPopup handleAddOrderDetails={addOrderItems} />
                             </th>
                             <th scope="col" className="px-6 py-3 w-1">
                                 No.
@@ -195,7 +214,7 @@ const InputTransaction = () => {
                     ) : (
                         <>
                             <tbody>
-                                {orders.map(({ kodeBarang, namaBarang, quatity, hargaBandrol, diskonPersen, diskonRupiah, hargaDiskon, total }, index) => (
+                                {orderDetails.map(({ kodeBarang, namaBarang, quatity, hargaBandrol, diskonPersen, diskonRupiah, hargaDiskon, total }, index) => (
                                     <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <td scope="row" className="px-1 py-3 flex items-center gap-1">
                                             <button className="px-2 py-1 bg-blue-700 hover:bg-blue-800 text-white text-sm rounded-md">Ubah</button>
@@ -207,11 +226,11 @@ const InputTransaction = () => {
                                         <td className="px-6 py-4">{kodeBarang}</td>
                                         <td className="px-6 py-4">{namaBarang}</td>
                                         <td className="px-6 py-4">{quatity}</td>
-                                        <td className="px-6 py-4">{hargaBandrol}</td>
-                                        <td className="px-6 py-4">{diskonPersen}</td>
-                                        <td className="px-6 py-4">{diskonRupiah}</td>
-                                        <td className="px-6 py-4">{hargaDiskon}</td>
-                                        <td className="px-6 py-4">{total}</td>
+                                        <td className="px-6 py-4">{hargaBandrol.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+                                        <td className="px-6 py-4">{diskonPersen * 100}%</td>
+                                        <td className="px-6 py-4">{diskonRupiah.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+                                        <td className="px-6 py-4">{hargaDiskon.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+                                        <td className="px-6 py-4">{total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -223,7 +242,7 @@ const InputTransaction = () => {
                                         <p className="mb-2">Sub Total</p>
                                     </td>
                                     <td colSpan={3} className="px-6 pt-3 pb-2">
-                                        <p className="mb-2 text-base">{subTotal.toLocaleString()}</p>
+                                        <p className="mb-2 text-base">{subTotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
                                     </td>
                                 </tr>
                                 <tr className="font-semibold text-gray-900 dark:text-white">
@@ -265,7 +284,7 @@ const InputTransaction = () => {
                                         Total Bayar
                                     </td>
                                     <td colSpan={3} className="px-6 py-3 text-base">
-                                        {(subTotal - totalDiscount - totalDeliveryFee).toLocaleString()}
+                                        {(subTotal - totalDiscount - totalDeliveryFee).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
                                     </td>
                                 </tr>
                             </tfoot>
